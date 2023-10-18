@@ -120,13 +120,66 @@ authors = tree.xpath('//small[@class="author"]/text()')
 
 print ('Authors: ',authors)
 ---------------------------------
+
+
+scraper script
+---------------------------------
+#!/usr/bin/python3
+
+# IDENTFYING SPECIFIC PYTHON MODULES THAT WILL BE USED IN SCRIPT
+import lxml.html
+import requests
+
+# STATING A FUNCTION THAT THE SCRIPT CONTENT IS ATTACHED TO
+def main():
+
+# THIS OUTLINES THE WEBSITE AND DEFINES THE CONTENT ON THE PAGE TO BE TARGETED
+  page = requests.get('http://quotes.toscrape.com')
+  tree = lxml.html.fromstring(page.content)
+
+# THIS OUTLINES THE HTML TAG AND ATTRIBUTE TO BE TARGETED FOR THE DATA YOU WANT TO toscrape
+# "small" IS THE HTML TAG AND "class" IS THE HTML TAG ATTRIBUTE
+  authors = tree.xpath('//small[@class="author"]/text()')
+
+# PRINTS THE ABOVE VARIABLE WITH Authors: AS THE HEADER
+  print ('Authors: ',authors)
+
+# Future Code for json output
+# output = []
+# for info in zip(titles,prices, tags, total_platforms):
+#     resp = {}
+#     resp['title'] = info[0]
+#     resp['price'] = info[1]
+#     resp['tags'] = info[2]
+#     resp['platforms'] = info[3]
+#     output.append(resp)
+
+if __name__ == "__main__":
+    main()
+-----------------------------------------------------
+
+
 demo commands: 
 
 F12 developers console 
-
-
-
-
+scraping 
+  - 
+1) scanning
+   - nmap --script-help http-enum
+   - (port 80 enum) nmap --script http-enum 10.50.45.252
+   - nmap -
+2) sockets
+   - ssh student@<ip>  -L 2222:<target>:22
+   - ssh -M -S /tmp/jumpbox  -o StrictHostKeyChecking=no -o UserKnownHostFile=/dev/null
+    - ssh -S /tmp/jumpbox <anything>
+    - (making new runnel) ssh -S /tmp/jumpbox user@ip -O forward -L 2222:192.168.0.10:22
+    - netstat -antup | grep 2222
+    -  ssh -M -S /tmp/jumpbox -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostFile=/dev/null student23@127.0.0.1
+    - scp -o ControlPath=/tmp/jumpbox user@ip:/etc/passwd /tmp/password
+    - ssh -S /tmp/jumpbox <anything> -D 9050
+    - proxychains nmap -sT -Pn -p 80 192.168.0.10 2> /dev/null
+    - for i in {1..254} ; do (ping -c 1 192.168.1.$i |grep "bytes from" &) ;done
+    - proxychains scraper.py <website> 
 
 ------------------------------------
 
@@ -152,7 +205,7 @@ Dirctory: /usr/share/nmap/scripts
   - nmap --script  -help|-args|-args-file|-trace
   - nmap --script=finger
 
-
+nmap <F5 i<C-R>=strftime("%Y-%m-%d-%H:%M:%S")<CR>-- 
 
 
 
