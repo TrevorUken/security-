@@ -179,7 +179,10 @@ scraping
     - scp -o ControlPath=/tmp/jumpbox user@ip:/etc/passwd /tmp/password
     - ssh -S /tmp/jumpbox <anything> -D 9050
     - proxychains nmap -sT -Pn -p 80 192.168.0.10 2> /dev/null
-    - for i in {1..254} ; do (ping -c 1 192.168.1.$i |grep "bytes from" &) ;done
+  
+    - Scaning a network
+    - --------------------------------------------------------------------------
+    - for i in {1..254} ;do (ping -c 1 192.168.150.$i | grep "bytes from" &) ;done
     - proxychains scraper.py <website> 
 
 ------------------------------------
@@ -322,17 +325,103 @@ Selection=2 UNION SELECT 1,column_name,3 FROM information_schema.columns WHERE t
 
 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Day 4) 
+
+Reverse engineering 
+----------------------------
+16 general registers 
+%rax - the first return register 
+%rbp - the base pointer that keeps track of the base of the stack
+%rsp - the stack pointer that points to the top of the stack
+
+common terms 
+------------------------------------
+Heap - Memory that can be allocated and deallocated
+Stack - A contiguous section of memory used for passing arguments
+General Register - A multipurpose register that can be used by either programmer or user to store data or a memory location address
+Control Register - A processor register that changes or controls the behavior of a CPU
+Flags Register - Contains the current state of the processor
 
 
-ports 3333,7418=12.168.28.111
+memory offset
+--------------------------
+instruction pointer 
+64 bit - RIP 
+32 bit - EIP
+lower 16 bits - IP (instruction pointer) 
+
+common instrucntion pointers 
+--------------------------------------------
+MOV - move source to destination
+PUSH - push source onto stack
+POP - Pop top of stack to destination
+INC - Increment source by 1
+DEC - Decrement source by 1
+ADD - Add source to destination
+SUB - Subtract source from destination
+CMP - Compare 2 values by subtracting them and setting the %RFLAGS register. ZeroFlag set means they are the same.
+JMP - Jump to specified location
+JLE - Jump if less than or equal
+JE - Jump if equal
+
+
+
+
+
+
+
+ports 3333,7418=192.168.28.111
       9638=10.100.28.40:80
       9999:10.100.28.55:80
 
 
+-------------------
 
 
 
+Donovian Database Exploitation (DWDBE)
+XX Dec 2026
+Start Time: 1300
+Duration: 4 hours
 
+Type of Operation: Cyberspace Exploitation (C-E)
+
+Objective: Maneuver through network, identify and gather intelligence from the Donovian Logistics Agency database.
+
+Tools/Techniques: All connections will be established through web browser to donovian-nla. SSH masquerade to Donovian_Webserver with provide credentials. Ports in use will be dependent on target location and are subject to change. Web exploitation techniques are limited to SQLi injections. Network scanning tools/technique usage is at the discretion of student.
+
+Scenario Credentials: FLAG = 5QL1nj3ct5t@rt0F@ct1v1ty
+
+Prior Approvals: SQLi injects through web browser. Creation of database administrator account if directed to. Any connection to donovian-nla other than HTTP/HTTPs is NOT approved.
+
+Scheme of Maneuver:
+>internet_grey_host
+â†’Pivot: 192.168.28.111
+-â†’T1:10.100.28.48
+
+Target Section:
+
+Pivot
+Hostname: Donovian_Webserver
+IP: 192.168.28.111
+OS: Ubuntu 18.04
+Creds: comrade :: StudentWebExploitPassword
+Last Known SSH Port: 2222
+PSP: none
+Malware: none
+Action: Perform SSH masquerade and redirect to the next target. No survey required, system is cleared
+
+T1
+Hostname: donovian-nla
+IP: 10.100.28.48
+OS: unknown
+Creds:unknown
+Last Known SSH Port: unknown
+Last Known HTTP Port: 80
+PSP: Unknown
+Malware: Unknown
+Action: Conduct approved SQLi Exploitation techniques to collect intellegence.
 
 
 
